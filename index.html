@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- NestWise Services local portfolio draft. Not deployed or indexed.
-     The quote form is intentionally disconnected. -->
+<!-- NestWise Services production site. Search indexing remains disabled
+     until final launch QA is complete. -->
 
 <title>Professional Window Cleaning | NestWise Services Utah</title>
 <meta name="description" content="Residential and commercial window cleaning across Utah, Salt Lake, Wasatch, and Summit County service areas. Get a quote from NestWise Services.">
@@ -715,10 +715,10 @@
         <p class="maintenance-note"><a class="text-link" href="#quote-form">Ask About Maintenance Plans <span aria-hidden="true">→</span></a></p>
       </div>
 
-      <!-- DISCONNECTED LOCAL DRAFT FORM. No action, endpoint, or third-party script.
-           script.js validates locally and prevents every submission. -->
-      <form class="quote-form" id="quote-form" data-draft-form novalidate>
-        <p class="form-draft-note">Local draft. This form will be connected before launch, so nothing is sent yet.</p>
+      <form class="quote-form" id="quote-form" data-contact-form action="https://api.web3forms.com/submit" method="POST" novalidate>
+        <input type="hidden" name="access_key" value="93775ba4-fd8f-4e48-88d6-f9169228155d">
+        <input type="hidden" name="subject" value="New quote request from NestWise Services">
+        <input type="hidden" name="from_name" value="NestWise Website Quote Form">
 
         <div class="field">
           <label for="name">Name</label>

@@ -90,7 +90,7 @@ document.documentElement.classList.add('js');
     updateControls();
   }
 
-  var form = document.querySelector('[data-draft-form]');
+  var form = document.querySelector('[data-contact-form]');
 
   if (form) {
     var status = form.querySelector('[data-form-status]');
@@ -134,6 +134,8 @@ document.documentElement.classList.add('js');
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       var firstBad = null;
+      var submitButton = form.querySelector('[type="submit"]');
+      var originalButtonText = submitButton ? submitButton.textContent : '';
 
       rules.forEach(function (rule) {
         var input = form.querySelector('#' + rule.id);
@@ -150,14 +152,75 @@ document.documentElement.classList.add('js');
       });
 
       if (firstBad) {
-        if (status) status.textContent = '';
+        if (status) {
+          status.textContent = '';
+          status.classList.remove('is-success', 'is-error');
+        }
         firstBad.focus();
         return;
       }
 
-      if (status) {
-        status.textContent = 'Local draft. Nothing was sent. Call or text (385) 473-5514.';
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
       }
+
+      form.setAttribute('aria-busy', 'true');
+
+      if (status) {
+        status.textContent = 'Sending your quote request...';
+        status.classList.remove('is-success', 'is-error');
+      }
+
+      var formData = new FormData(form);
+      var payload = {};
+
+      formData.forEach(function (value, key) {
+        payload[key] = value;
+      });
+
+      fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(function (response) {
+          return response.json().then(function (result) {
+            if (!response.ok || !result.success) {
+              throw new Error(result.message || 'Submission failed.');
+            }
+            return result;
+          });
+        })
+        .then(function () {
+          form.reset();
+          rules.forEach(function (rule) {
+            setError(rule, '');
+          });
+
+          if (status) {
+            status.textContent = 'Thanks! Your quote request was sent. We will be in touch soon.';
+            status.classList.remove('is-error');
+            status.classList.add('is-success');
+          }
+        })
+        .catch(function () {
+          if (status) {
+            status.textContent = 'We could not send your request. Please try again, or call or text (385) 473-5514.';
+            status.classList.remove('is-success');
+            status.classList.add('is-error');
+          }
+        })
+        .finally(function () {
+          form.removeAttribute('aria-busy');
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+          }
+        });
     });
   }
 

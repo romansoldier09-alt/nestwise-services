@@ -1572,16 +1572,6 @@ textarea {
   box-shadow: var(--shadow-soft);
 }
 
-.form-draft-note {
-  margin: 0 0 1.5rem;
-  padding: 0.75rem 1rem;
-  border-left: 3px solid var(--ink-soft);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  background: var(--cream);
-  color: var(--ink-soft);
-  font-size: var(--step-small);
-}
-
 .field,
 .field-row .field {
   margin-bottom: 1.15rem;
@@ -1656,9 +1646,22 @@ textarea {
 .form-status {
   min-height: 1.4em;
   margin: 0.75rem 0 0;
-  color: var(--red-dark);
+  color: var(--ink-soft);
   font-size: var(--step-small);
   font-weight: 700;
+}
+
+.form-status.is-success {
+  color: #237a3b;
+}
+
+.form-status.is-error {
+  color: var(--red-dark);
+}
+
+.quote-form[aria-busy="true"] .btn[type="submit"] {
+  cursor: wait;
+  opacity: 0.72;
 }
 
 @media (min-width: 42rem) {
